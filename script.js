@@ -41,20 +41,34 @@ faceapi.nets.faceRecognitionNet.loadFromUri('models')
 // load gf face
 async function loadReferenceFace(){
 
-const img = await faceapi.fetchImage("faces/gf.jpg")
+// load both images
+const img1 = await faceapi.fetchImage("faces/gf.jpeg")
+const img2 = await faceapi.fetchImage("faces/gf1.jpeg")
 
-const detection = await faceapi
-.detectSingleFace(img)
+// detect both faces
+const det1 = await faceapi
+.detectSingleFace(img1)
 .withFaceLandmarks()
 .withFaceDescriptor()
 
-const labeled = new faceapi.LabeledFaceDescriptors("gf", [detection.descriptor])
+const det2 = await faceapi
+.detectSingleFace(img2)
+.withFaceLandmarks()
+.withFaceDescriptor()
+
+// create labeled descriptors
+const labeled = new faceapi.LabeledFaceDescriptors("allowed", [
+det1.descriptor,
+det2.descriptor
+])
 
 faceMatcher = new faceapi.FaceMatcher(labeled, 0.6)
 
 startVideo()
 
 }
+
+
 
 
 
@@ -84,7 +98,7 @@ if(detections.length>0){
 
 const result = faceMatcher.findBestMatch(detections[0].descriptor)
 
-if(result.label==="gf"){
+if(result.label==="allowed"){
 
 unlockWebsite()
 

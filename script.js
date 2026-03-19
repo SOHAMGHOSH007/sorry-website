@@ -1,6 +1,7 @@
+// WAIT FOR PAGE LOAD
 window.onload = function(){
 
-// START BUTTON FIX
+// START BUTTON
 document.getElementById("startBtn").onclick = () => {
 startVideo()
 }
@@ -39,7 +40,7 @@ brickImage.src = "images/brick.png"
 let faceMatcher
 
 
-// load models
+// LOAD MODELS
 Promise.all([
 faceapi.nets.tinyFaceDetector.loadFromUri('models'),
 faceapi.nets.faceLandmark68Net.loadFromUri('models'),
@@ -47,15 +48,12 @@ faceapi.nets.faceRecognitionNet.loadFromUri('models')
 ]).then(loadReferenceFace)
 
 
-
-// load gf face
+// LOAD REFERENCE FACES
 async function loadReferenceFace(){
 
-// load both images
 const img1 = await faceapi.fetchImage("faces/gf.jpeg")
 const img2 = await faceapi.fetchImage("faces/gf1.jpeg")
 
-// detect both faces
 const det1 = await faceapi
 .detectSingleFace(img1)
 .withFaceLandmarks()
@@ -66,7 +64,6 @@ const det2 = await faceapi
 .withFaceLandmarks()
 .withFaceDescriptor()
 
-// create labeled descriptors
 const labeled = new faceapi.LabeledFaceDescriptors("allowed", [
 det1.descriptor,
 det2.descriptor
@@ -74,13 +71,10 @@ det2.descriptor
 
 faceMatcher = new faceapi.FaceMatcher(labeled, 0.6)
 
-  
+}
 
 
-
-
-
-// start camera
+// START CAMERA
 function startVideo(){
 
 navigator.mediaDevices.getUserMedia({ video: true })
@@ -89,13 +83,13 @@ video.srcObject = stream
 video.play()
 })
 .catch(err=>{
-alert("Camera permission required ❤️")
+alert("Allow camera to continue ❤️")
 })
 
 }
 
 
-// detect face in camera
+// FACE DETECTION
 video.addEventListener("play",()=>{
 
 setInterval(async()=>{
@@ -122,8 +116,7 @@ unlockWebsite()
 })
 
 
-
-// unlock site
+// UNLOCK WEBSITE
 function unlockWebsite(){
 
 page1.classList.add("hidden")
@@ -136,19 +129,16 @@ startBricks()
 }
 
 
-
-// start bricks
+// START BRICKS
 function startBricks(){
 
 for(let i=0;i<320;i++){
 
 bricks.push({
-
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
 vx:(Math.random()-0.5)*4,
 vy:(Math.random()-0.5)*4
-
 })
 
 }
@@ -160,8 +150,7 @@ setTimeout(sunflower,1500)
 }
 
 
-
-// draw bricks
+// DRAW
 function draw(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height)
@@ -183,64 +172,46 @@ requestAnimationFrame(draw)
 }
 
 
-
-// sunflower shape
+// SUNFLOWER
 function sunflower(){
 
 let cx = canvas.width/2
 let cy = canvas.height/2
 
 bricks.forEach((b,i)=>{
-
 let angle = i*0.15
 let r = 120
-
 b.x = cx + Math.cos(angle)*r
 b.y = cy + Math.sin(angle)*r
-
 })
 
 }
 
 
-
-// panda shape
+// SHAPES
 function panda(){
-
 bricks.forEach(b=>{
 b.x = canvas.width/2+(Math.random()*200-100)
 b.y = canvas.height/2+(Math.random()*200-100)
 })
-
 }
 
-
-
-// sailboat shape
 function sailboat(){
-
 bricks.forEach((b,i)=>{
 b.x = canvas.width/2-150+i
 b.y = canvas.height/2+Math.sin(i/8)*30
 })
-
 }
 
-
-
-// bouquet shape
 function bouquet(){
-
 bricks.forEach((b,i)=>{
 b.x = canvas.width/2+Math.cos(i)*80
 b.y = canvas.height/2+Math.sin(i)*80
 })
-
 }
 
 
-
-// change shape
+// CHANGE SHAPE
 function nextShape(){
 
 shapeIndex++
@@ -256,54 +227,37 @@ showQuote()
 }
 
 
-
-// quote
+// QUOTE
 function showQuote(){
 
 page2.innerHTML = "<h2>Sometimes things fall apart, for a better beginning</h2>"
 
 setTimeout(()=>{
-
 page2.classList.add("hidden")
 page3.classList.remove("hidden")
-
 },10000)
 
 }
 
 
-
-// yes button
+// BUTTONS
 document.getElementById("yesBtn").onclick=()=>{
-
 page3.classList.add("hidden")
 page4yes.classList.remove("hidden")
-
 }
 
-
-
-// no button
 document.getElementById("noBtn").onclick=()=>{
-
 page3.classList.add("hidden")
 page4no.classList.remove("hidden")
-
 }
 
-
-
-// loop button
 document.getElementById("loopBtn").onclick=()=>{
-
 page4no.classList.add("hidden")
 page2.classList.remove("hidden")
-
 }
 
 
-
-// shake detection
+// SHAKE
 let last = 0
 
 window.addEventListener("devicemotion",e=>{
@@ -312,10 +266,8 @@ let acc = e.accelerationIncludingGravity
 let val = Math.abs(acc.x+acc.y+acc.z)
 
 if(val-last>20){
-
 explode()
 nextShape()
-
 }
 
 last = val
@@ -323,15 +275,12 @@ last = val
 })
 
 
-
-// explode bricks
+// EXPLODE
 function explode(){
 
 bricks.forEach(b=>{
-
 b.vx = (Math.random()-0.5)*10
 b.vy = (Math.random()-0.5)*10
-
 })
 
 }

@@ -68,41 +68,38 @@ function startDetection(){
 
 const interval = setInterval(async()=>{
 
-try{
-
 const detections = await faceapi.detectAllFaces(
 video,
 new faceapi.TinyFaceDetectorOptions()
 )
 
-console.log("faces:", detections.length) // debug
-
-if(detections && detections.length > 0){
-
-console.log("FACE DETECTED ✅")
+if(detections.length > 0){
 
 clearInterval(interval)
 
-// 🔥 direct unlock (no delay issue)
+console.log("FACE DETECTED ✅")
+
 unlockWebsite()
 
 }
 
-}catch(e){
-console.log("error", e)
-}
-
-},300)
+},400)
 
 }
 
 // UNLOCK WEBSITE
-function unlockWebsite() {
-  page1.classList.add("hidden");
-  page2.classList.remove("hidden");
+function unlockWebsite(){
 
-  song.play();
-  startBricks();
+console.log("UNLOCK CALLED 🚀")
+
+page1.style.display = "none"
+page2.style.display = "block"
+
+// 🔥 audio safe play
+song.play().catch(()=>{})
+
+startBricks()
+
 }
 
 // START BRICKS

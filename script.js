@@ -99,7 +99,12 @@ const detections = await faceapi
 .withFaceLandmarks()
 .withFaceDescriptors()
 
-if(detections.length>0){
+const result = faceMatcher.findBestMatch(detections[0].descriptor)
+
+// ultra loose accept
+if(result.distance < 0.8){
+unlockWebsite()
+}
 
 const result = faceMatcher.findBestMatch(detections[0].descriptor)
 

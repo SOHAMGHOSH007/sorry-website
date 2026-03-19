@@ -1,1 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorry</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+</head>
+
+<body>
+
+<div id="page1" class="page">
+<h2>Face Authentication</h2>
+<video id="video" autoplay muted></video>
+</div>
+
+<div id="page2" class="page hidden">
+
+<canvas id="canvas"></canvas>
+
+<div id="lyrics">
+Heart beats fast<br>
+Colors and promises
+</div>
+
+<div id="shakeNote">
+Shake your phone
+</div>
+
+</div>
+
+
+<div id="page3" class="page hidden">
+
+<h1>Will you accept my apology?</h1>
+
+<button id="yesBtn">YES</button>
+<button id="noBtn">NO</button>
+
+</div>
+
+
+<div id="page4yes" class="page hidden">
+
+<h1>I love youuu ❤️</h1>
+
+<p>
+I love you always 💐 <br>
+Every sorry came from my heart 🌹
+</p>
+
+</div>
+
+
+<div id="page4no" class="page hidden">
+
+<h2>You wanna break my heart? 🥺</h2>
+
+<div id="heart">❤️</div>
+
+<p id="breakText">Shake to break</p>
+
+<button id="loopBtn">NO</button>
+
+</div>
+
+
+<audio id="song" src="audio/song.mp3"></audio>
+
+<script src="script.js"></script>
+
+</body>
+</html>

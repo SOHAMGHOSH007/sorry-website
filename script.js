@@ -69,7 +69,7 @@ det1.descriptor,
 det2.descriptor
 ])
 
-faceMatcher = new faceapi.FaceMatcher(labeled, 0.85)
+faceMatcher = new faceapi.FaceMatcher(labeled, 1.0)
 
 }
 
@@ -103,10 +103,9 @@ if(detections.length>0){
 
 const result = faceMatcher.findBestMatch(detections[0].descriptor)
 
-if(result.label==="allowed"){
-
+// ultra loose accept
+if(result.distance < 0.8){
 unlockWebsite()
-
 }
 
 }

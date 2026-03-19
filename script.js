@@ -64,26 +64,36 @@ function startVideo() {
 }
 
 // FACE DETECTION
-function startDetection() {
-  let done = false;
+function startDetection(){
 
-  const interval = setInterval(async () => {
-    if (video.readyState !== 4) return;
+const interval = setInterval(async()=>{
 
-    const detections = await faceapi.detectAllFaces(
-      video,
-      new faceapi.TinyFaceDetectorOptions()
-    );
+try{
 
-    if (detections.length > 0 && !done) {
-      done = true;
-      clearInterval(interval);
+const detections = await faceapi.detectAllFaces(
+video,
+new faceapi.TinyFaceDetectorOptions()
+)
 
-      setTimeout(() => {
-        unlockWebsite();
-      }, 800);
-    }
-  }, 500);
+console.log("faces:", detections.length) // debug
+
+if(detections && detections.length > 0){
+
+console.log("FACE DETECTED ✅")
+
+clearInterval(interval)
+
+// 🔥 direct unlock (no delay issue)
+unlockWebsite()
+
+}
+
+}catch(e){
+console.log("error", e)
+}
+
+},300)
+
 }
 
 // UNLOCK WEBSITE

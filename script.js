@@ -75,13 +75,15 @@ startVideo()
 // start camera
 function startVideo(){
 
-navigator.mediaDevices.getUserMedia({ video:{} })
+navigator.mediaDevices.getUserMedia({ video: true })
 .then(stream=>{
 video.srcObject = stream
 })
+.catch(err=>{
+alert("Please allow camera access to continue ❤️")
+})
 
 }
-
 
 
 // detect face in camera

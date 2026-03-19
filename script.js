@@ -69,7 +69,7 @@ det1.descriptor,
 det2.descriptor
 ])
 
-faceMatcher = new faceapi.FaceMatcher(labeled, 0.6)
+faceMatcher = new faceapi.FaceMatcher(labeled, 0.85)
 
 }
 

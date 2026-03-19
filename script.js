@@ -1,3 +1,13 @@
+window.onload = function(){
+
+// START BUTTON FIX
+document.getElementById("startBtn").onclick = () => {
+startVideo()
+}
+
+}
+
+
 // pages
 const page1 = document.getElementById("page1")
 const page2 = document.getElementById("page2")
@@ -64,9 +74,6 @@ det2.descriptor
 
 faceMatcher = new faceapi.FaceMatcher(labeled, 0.6)
 
-document.getElementById("startBtn").onclick = () => {
-startVideo()
-}
   
 
 
@@ -79,9 +86,10 @@ function startVideo(){
 navigator.mediaDevices.getUserMedia({ video: true })
 .then(stream=>{
 video.srcObject = stream
+video.play()
 })
 .catch(err=>{
-alert("Please allow camera access to continue ❤️")
+alert("Camera permission required ❤️")
 })
 
 }

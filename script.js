@@ -64,9 +64,10 @@ det2.descriptor
 
 faceMatcher = new faceapi.FaceMatcher(labeled, 0.6)
 
+document.getElementById("startBtn").onclick = () => {
 startVideo()
-
 }
+  
 
 
 

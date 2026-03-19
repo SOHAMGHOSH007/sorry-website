@@ -92,10 +92,9 @@ function unlockWebsite(){
 
 console.log("UNLOCK CALLED 🚀")
 
-page1.style.display = "none"
-page2.style.display = "block"
+document.getElementById("page1").style.display = "none"
+document.getElementById("page2").style.display = "block"
 
-// 🔥 audio safe play
 song.play().catch(()=>{})
 
 startBricks()

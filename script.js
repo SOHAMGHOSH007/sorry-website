@@ -1,9 +1,15 @@
 // WAIT FOR PAGE LOAD
 window.onload = function () {
   document.getElementById("startBtn").addEventListener("click", () => {
-    startVideo();
-  });
-};
+
+startVideo() // camera ON for feel 😏
+
+// 🔥 fake face detection delay
+setTimeout(() => {
+unlockWebsite()
+}, 1500)
+
+});
 
 // pages
 const page1 = document.getElementById("page1");

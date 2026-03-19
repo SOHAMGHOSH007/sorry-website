@@ -1,11 +1,8 @@
 // WAIT FOR PAGE LOAD
 window.onload = function(){
-
-// START BUTTON
 document.getElementById("startBtn").onclick = () => {
 startVideo()
 }
-
 }
 
 
@@ -36,42 +33,13 @@ let shapeIndex = 0
 const brickImage = new Image()
 brickImage.src = "images/brick.png"
 
-// face matcher
-let faceMatcher
 
-
-// LOAD MODELS
+// LOAD MODELS (ONLY DETECTION)
 Promise.all([
-faceapi.nets.tinyFaceDetector.loadFromUri('models'),
-faceapi.nets.faceLandmark68Net.loadFromUri('models'),
-faceapi.nets.faceRecognitionNet.loadFromUri('models')
-]).then(loadReferenceFace)
-
-
-// LOAD REFERENCE FACES
-async function loadReferenceFace(){
-
-const img1 = await faceapi.fetchImage("faces/gf.jpeg")
-const img2 = await faceapi.fetchImage("faces/gf1.jpeg")
-
-const det1 = await faceapi
-.detectSingleFace(img1)
-.withFaceLandmarks()
-.withFaceDescriptor()
-
-const det2 = await faceapi
-.detectSingleFace(img2)
-.withFaceLandmarks()
-.withFaceDescriptor()
-
-const labeled = new faceapi.LabeledFaceDescriptors("allowed", [
-det1.descriptor,
-det2.descriptor
-])
-
-faceMatcher = new faceapi.FaceMatcher(labeled, 1.0)
-
-}
+faceapi.nets.tinyFaceDetector.loadFromUri('models')
+]).then(()=>{
+console.log("Model Loaded ✅")
+})
 
 
 // START CAMERA
@@ -82,40 +50,34 @@ navigator.mediaDevices.getUserMedia({ video: true })
 video.srcObject = stream
 video.play()
 })
-.catch(err=>{
-alert("Allow camera to continue ❤️")
+.catch(()=>{
+alert("Allow camera ❤️")
 })
 
 }
 
 
-// FACE DETECTION
+// FACE DETECTION (ANY FACE = UNLOCK)
 video.addEventListener("play",()=>{
 
-setInterval(async()=>{
+const interval = setInterval(async()=>{
 
-const detections = await faceapi
-.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions())
-.withFaceLandmarks()
-.withFaceDescriptors()
+const detections = await faceapi.detectAllFaces(
+video,
+new faceapi.TinyFaceDetectorOptions()
+)
 
-const result = faceMatcher.findBestMatch(detections[0].descriptor)
+if(detections.length > 0){
 
-// ultra loose accept
-if(result.distance < 0.8){
+clearInterval(interval)
+
+setTimeout(()=>{
 unlockWebsite()
-}
-
-const result = faceMatcher.findBestMatch(detections[0].descriptor)
-
-// ultra loose accept
-if(result.distance < 0.8){
-unlockWebsite()
-}
+},800)
 
 }
 
-},1000)
+},500)
 
 })
 
@@ -127,7 +89,6 @@ page1.classList.add("hidden")
 page2.classList.remove("hidden")
 
 song.play()
-
 startBricks()
 
 }
@@ -148,7 +109,6 @@ vy:(Math.random()-0.5)*4
 }
 
 draw()
-
 setTimeout(sunflower,1500)
 
 }

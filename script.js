@@ -4,11 +4,8 @@ window.onload = function () {
 document.getElementById("startBtn").addEventListener("click", () => {
 
 startVideo()
-
-// 🔥 FAKE FACE SCAN TEXT
 showScanText()
 
-// 🔥 AUTO UNLOCK (illusion)
 setTimeout(() => {
 unlockWebsite()
 }, 1800)
@@ -40,30 +37,24 @@ canvas.height = window.innerHeight
 
 let bricks = []
 let shapeIndex = 0
+let state = "sorry"   // control flow
 
 // brick image
 const brickImage = new Image()
 brickImage.src = "images/brick.png"
 
 
-// 🎥 START CAMERA (just for feel)
+// 🎥 CAMERA
 function startVideo(){
-
-navigator.mediaDevices.getUserMedia({
-video: { facingMode: "user" }
-})
+navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
 .then(stream=>{
 video.srcObject = stream
 video.play()
-})
-.catch(()=>{
-console.log("camera blocked")
-})
-
+}).catch(()=>{})
 }
 
 
-// 💖 SCAN TEXT EFFECT
+// 💖 SCAN TEXT
 function showScanText(){
 
 let text = document.createElement("div")
@@ -85,20 +76,19 @@ text.innerText = "Face Recognized ❤️"
 }
 
 
-// 🔓 UNLOCK WEBSITE
+// 🔓 UNLOCK
 function unlockWebsite(){
 
-// remove scan text
 let t = document.getElementById("scanText")
 if(t) t.remove()
 
 page1.style.display = "none"
 page2.style.display = "block"
 
-// safe audio play
 song.play().catch(()=>{})
 
 startBricks()
+startLyrics()
 
 }
 
@@ -106,20 +96,24 @@ startBricks()
 // 🧱 START BRICKS
 function startBricks(){
 
-for(let i=0;i<320;i++){
+bricks = []
 
+for(let i=0;i<320;i++){
 bricks.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*4,
-vy:(Math.random()-0.5)*4
+vx:0,
+vy:0
 })
-
 }
 
 draw()
 
-setTimeout(sunflower,1500)
+// 🔥 15 sec SORRY stable
+setTimeout(()=>{
+state = "sunflower"
+sunflower()
+},15000)
 
 }
 
@@ -130,15 +124,7 @@ function draw(){
 ctx.clearRect(0,0,canvas.width,canvas.height)
 
 bricks.forEach(b=>{
-
-b.x+=b.vx
-b.y+=b.vy
-
-if(b.x<0||b.x>canvas.width) b.vx*=-1
-if(b.y<0||b.y>canvas.height) b.vy*=-1
-
-ctx.drawImage(brickImage,b.x,b.y,28,14)
-
+ctx.drawImage(brickImage,b.x,b.y,60,30) // 🔥 bigger bricks
 })
 
 requestAnimationFrame(draw)
@@ -146,18 +132,25 @@ requestAnimationFrame(draw)
 }
 
 
-// 🌻 SUNFLOWER
+// 🌻 SUNFLOWER (2 flowers)
 function sunflower(){
 
-let cx = canvas.width/2
+let cx1 = canvas.width/2 - 100
+let cx2 = canvas.width/2 + 100
 let cy = canvas.height/2
 
 bricks.forEach((b,i)=>{
-let angle = i*0.15
-let r = 120
+let angle = i * 0.2
+let r = 80
 
-b.x = cx + Math.cos(angle)*r
+if(i < bricks.length/2){
+b.x = cx1 + Math.cos(angle)*r
 b.y = cy + Math.sin(angle)*r
+}else{
+b.x = cx2 + Math.cos(angle)*r
+b.y = cy + Math.sin(angle)*r
+}
+
 })
 
 }
@@ -180,14 +173,16 @@ b.y = canvas.height/2+Math.sin(i/8)*30
 
 function bouquet(){
 bricks.forEach((b,i)=>{
-b.x = canvas.width/2+Math.cos(i)*80
-b.y = canvas.height/2+Math.sin(i)*80
+b.x = canvas.width/2+Math.cos(i)*100
+b.y = canvas.height/2+Math.sin(i)*100
 })
 }
 
 
-// 🔄 CHANGE SHAPE
+// 🔄 CHANGE SHAPE (ONLY AFTER SUNFLOWER)
 function nextShape(){
+
+if(state !== "sunflower") return
 
 shapeIndex++
 
@@ -215,6 +210,28 @@ page3.style.display = "block"
 }
 
 
+// 🎵 LYRICS AUTO CHANGE
+function startLyrics(){
+
+const lyrics = [
+"Heart beats fast",
+"Colors and promises",
+"How to be brave",
+"How can I love when I'm afraid",
+"But watching you stand alone",
+"All of my doubt suddenly goes away ❤️"
+]
+
+let i = 0
+
+setInterval(()=>{
+document.getElementById("lyrics").innerHTML = lyrics[i]
+i = (i+1) % lyrics.length
+},3000)
+
+}
+
+
 // ❤️ BUTTONS
 document.getElementById("yesBtn").onclick=()=>{
 page3.style.display = "none"
@@ -232,7 +249,7 @@ page2.style.display = "block"
 }
 
 
-// 📱 SHAKE DETECT
+// 📱 SHAKE
 let last = 0
 
 window.addEventListener("devicemotion",e=>{
